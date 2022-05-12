@@ -1,0 +1,40 @@
+<div class="d-flex container-fluid flex-row h-100">
+  <div class="navigation m-3">
+    <div class="nav flex-row nav-pills">
+      <div class="nav-item" *ngFor="let route of routes;">
+        <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+true}" [routerLink]="route.path">{{tabDisplayName(route.component?.name) }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex container-fluid flex-row h-100">
+  <div class="tab container flex-fill h-100 px-0 bg-white border-bottom d-flex flex-column">
+    <!-- All tabs -->
+    <ul class="nav nav-tabs bg-light mt-3">
+      <li class="nav-item" *ngFor="let tab of tabs; let first = first;" (mouseleave)="mouseOverTab()"
+        (mouseenter)="mouseOverTab(tab)">
+        <div class="nav-link" [class.active]="tab.active">
+          <div class="d-flex flex-row cursor-pointer">
+            <div class="flex-fill" [routerLink]="tab.route?.path">{{ tabDisplayName(tab.name) }}</div>
+            <div class="transition-all-ease-250ms" [style.width]="currentHoverTabKey == tab.key ? 'auto': '0px'"
+              [class.pl-3]="currentHoverTabKey == tab.key" [class.opacity-0]="currentHoverTabKey != tab.key"
+              [class.invisible]="currentHoverTabKey != tab.key" *ngIf="tabs.length > 1" (click)="disposeTab(tab)">X
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Content of one tab (and all other non visible) -->
+    <div class="tab-content p-3 border-left border-right flex-fill">
+      <ng-container *ngFor="let tab of tabs">
+        <div class="tab-pane fade {{tab.name}}" [class.show]="tab.active" [class.active]="tab.active" [id]="tab.name"
+          role="tabpanel">
+          <ng-container *ngComponentOutlet="tab.component;"></ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
